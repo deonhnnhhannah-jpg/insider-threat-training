@@ -1,0 +1,1261 @@
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  margin: 0;
+  background: #000;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  overflow: hidden;
+  color: #fff;
+  touch-action: manipulation;
+}
+
+#game {
+  width: 100vw;
+  height: 100vh;
+  position: relative;
+  background: #000;
+}
+
+/* Background */
+#bg {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  filter: brightness(0.7);
+}
+
+/* Portraits */
+.portrait {
+  position: absolute;
+  bottom: 180px;
+  width: 320px;
+  opacity: 0;
+  transition: opacity 0.4s, transform 0.4s;
+}
+
+.hidden {
+  display: none !important;
+}
+
+.hidden {
+  opacity: 0 !important;
+}
+
+#leftChar { left: 20px; }
+#rightChar { right: 20px; }
+
+#multiplayerHud {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  min-width: 220px;
+  padding: 12px 14px;
+  border: 1px solid rgba(255,255,255,0.14);
+  border-radius: 12px;
+  background: rgba(7, 12, 24, 0.82);
+  backdrop-filter: blur(8px);
+  z-index: 8;
+}
+
+#multiplayerRoom,
+#multiplayerRole,
+#multiplayerStatus {
+  font-size: 13px;
+}
+
+#multiplayerRoom,
+#multiplayerRole {
+  margin-bottom: 4px;
+}
+
+#multiplayerStatus {
+  color: #bfdbfe;
+  margin-bottom: 8px;
+}
+
+#multiplayerPlayers {
+  margin: 8px 0;
+}
+
+.player-card {
+  margin-bottom: 6px;
+  padding: 8px 10px;
+  border-radius: 8px;
+  background: rgba(255,255,255,0.08);
+  font-size: 12px;
+  line-height: 1.4;
+}
+
+.player-card.ready {
+  border: 1px solid rgba(74,222,128,0.6);
+}
+
+.player-card.waiting {
+  border: 1px solid rgba(248,113,113,0.45);
+}
+
+#multiplayerReadyBtn {
+  width: 100%;
+  padding: 9px 12px;
+  border: none;
+  border-radius: 10px;
+  background: #0f766e;
+  color: #fff;
+  font-size: 13px;
+  cursor: pointer;
+}
+
+#multiplayerReadyBtn:hover {
+  background: #0d9488;
+}
+
+/* Dialogue box */
+#dialogueBox {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  min-height: 220px;
+  max-height: 38vh;
+  background: rgba(0,0,0,0.8);
+  padding: 18px 20px;
+  border-top: 1px solid rgba(255,255,255,0.1);
+  opacity: 1;
+  transition: opacity 0.18s ease;
+  overflow-y: auto;
+}
+
+#dialogueBox.scene-fade-out {
+  opacity: 0;
+}
+
+#name {
+  font-size: 20px;
+  font-weight: 600;
+}
+
+#role {
+  font-size: 12px;
+  opacity: 0.7;
+  margin-bottom: 8px;
+}
+
+#text {
+  font-size: 17px;
+  min-height: 60px;
+}
+
+#roleHint {
+  margin-bottom: 10px;
+  padding: 10px 12px;
+  border-left: 3px solid #60a5fa;
+  border-radius: 8px;
+  background: rgba(96,165,250,0.12);
+  color: #dbeafe;
+  font-size: 13px;
+}
+
+/* Choices */
+#choices {
+  margin-top: 10px;
+}
+
+.choice {
+  background: rgba(255,255,255,0.1);
+  padding: 8px 10px;
+  margin-top: 6px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background 0.2s, transform 0.05s;
+  font-size: 14px;
+}
+
+.choice:hover {
+  background: rgba(255,255,255,0.25);
+  transform: translateY(-1px);
+}
+
+.choice.disabled {
+  opacity: 0.5;
+  pointer-events: none;
+}
+
+.choice.locked {
+  background: rgba(59,130,246,0.3);
+  border: 1px solid rgba(147,197,253,0.7);
+}
+
+/* Feedback (used for hotspots) */
+#feedback {
+  margin-top: 8px;
+  padding: 8px 10px;
+  border-radius: 6px;
+  display: none;
+  font-size: 13px;
+}
+
+#feedback.good {
+  background: rgba(34,197,94,0.15);
+  border: 1px solid #22c55e;
+  color: #bbf7d0;
+}
+
+#feedback.bad {
+  background: rgba(239,68,68,0.15);
+  border: 1px solid #ef4444;
+  color: #fecaca;
+}
+
+/* Score bar */
+#scoreBar {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  font-size: 13px;
+}
+
+#scoreBar span {
+  display: block;
+  margin-bottom: 4px;
+}
+
+#scoreFill {
+  width: 200px;
+  height: 8px;
+  background: linear-gradient(90deg, #22c55e, #eab308, #ef4444);
+  border-radius: 999px;
+}
+
+/* Interactive text elements */
+.fake-link,
+.usb-hotspot,
+.chat-hotspot,
+.db-hotspot {
+  color: #4ea1ff;
+  text-decoration: underline;
+  cursor: pointer;
+}
+.fake-link:hover,
+.usb-hotspot:hover,
+.chat-hotspot:hover,
+.db-hotspot:hover {
+  color: #82c0ff;
+}
+
+.fake-link.hotspot-locked,
+.usb-hotspot.hotspot-locked,
+.chat-hotspot.hotspot-locked,
+.db-hotspot.hotspot-locked {
+  color: #94a3b8;
+  pointer-events: none;
+  text-decoration: none;
+  cursor: default;
+}
+
+/* Result overlay (correct/incorrect screen) */
+#resultOverlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(0,0,0,0.8);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  z-index: 15;
+}
+
+#resultBox {
+  background: rgba(15,23,42,0.95);
+  border-radius: 12px;
+  padding: 20px 24px;
+  max-width: 520px;
+  border: 1px solid rgba(255,255,255,0.2);
+}
+
+#resultTitle {
+  font-size: 24px;
+  margin-bottom: 10px;
+}
+
+.flash-correct {
+  position: fixed;
+  inset: 0;
+  background: rgba(34,197,94,0.4);
+  animation: flashFade 0.3s forwards;
+  z-index: 999;
+}
+
+.flash-incorrect {
+  position: fixed;
+  inset: 0;
+  background: rgba(239,68,68,0.4);
+  animation: flashFade 0.3s forwards;
+  z-index: 999;
+}
+
+@keyframes flashFade {
+  from { opacity: 1; }
+  to { opacity: 0; }
+}
+
+#resultTitle.correct {
+  color: #4ade80;
+}
+
+#resultTitle.incorrect {
+  color: #f87171;
+}
+
+
+#resultText {
+  font-size: 15px;
+  margin-bottom: 16px;
+}
+
+#resultContinue {
+  padding: 8px 16px;
+  border-radius: 999px;
+  border: 1px solid #fff;
+  background: transparent;
+  color: #fff;
+  cursor: pointer;
+}
+#resultContinue:hover {
+  background: rgba(255,255,255,0.1);
+}
+
+/* Game over alert */
+.red-alert {
+  animation: shake 0.4s infinite;
+  filter: brightness(1.2) saturate(2);
+}
+
+/* Game over overlay */
+#gameOverOverlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(0,0,0,0.85);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  color: #fff;
+  z-index: 20;
+}
+
+#gameOverOverlay h1 {
+  font-size: 32px;
+  margin-bottom: 10px;
+  color: #f97373;
+}
+
+#gameOverOverlay p {
+  font-size: 16px;
+  max-width: 480px;
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+#gameOverOverlay button {
+  padding: 8px 16px;
+  border-radius: 999px;
+  border: 1px solid #fff;
+  background: transparent;
+  color: #fff;
+  cursor: pointer;
+}
+#gameOverOverlay button:hover {
+  background: rgba(255,255,255,0.1);
+}
+
+/* Hide elements */
+.hidden {
+  display: none !important;
+}
+
+/* Summary overlay */
+#summaryOverlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.7);
+  display: none;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+}
+
+#summaryBox {
+  background: #1e1e1e; /* dark background */
+  color: #ffffff;      /* white text */
+  padding: 30px;
+  border-radius: 12px;
+  width: 600px;
+  text-align: center;
+  box-shadow: 0 0 20px rgba(0,0,0,0.5);
+}
+
+#summaryContent p,
+#summaryContent h3 {
+  margin: 10px 0;
+  color: #ffffff; /* ensure text is visible */
+}
+
+#individualSummary {
+  margin-top: 18px;
+  padding-top: 14px;
+  border-top: 1px solid rgba(255,255,255,0.12);
+}
+
+#modeMenu {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.92);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 99999;
+}
+
+#modeBox {
+  background: #111827;
+  padding: 30px;
+  border-radius: 16px;
+  text-align: center;
+  width: 420px;
+  box-shadow: 0 0 25px rgba(0,0,0,0.5);
+}
+
+#modeBox h1 {
+  margin-bottom: 10px;
+}
+
+#modeBox p {
+  margin-bottom: 20px;
+  opacity: 0.85;
+}
+
+.menu-note,
+.menu-subnote {
+  font-size: 13px;
+  line-height: 1.5;
+  color: rgba(255,255,255,0.72);
+}
+
+.menu-note {
+  margin-top: 14px;
+  margin-bottom: 0;
+}
+
+.menu-subnote {
+  margin-top: 14px;
+  margin-bottom: 4px;
+}
+
+#modeBox button,
+#modeBox input {
+  width: 100%;
+  margin-top: 12px;
+  padding: 12px;
+  border-radius: 10px;
+  border: none;
+  font-size: 16px;
+}
+
+#modeBox button {
+  cursor: pointer;
+  background: #2563eb;
+  color: white;
+}
+
+#modeBox button:hover {
+  background: #1d4ed8;
+}
+
+#modeBox input {
+  background: #1f2937;
+  color: white;
+  border: 1px solid #374151;
+}
+
+@media (max-width: 768px) {
+  .portrait { width: 220px; bottom: 190px; }
+  #dialogueBox { min-height: 240px; max-height: 46vh; }
+}
+
+#duelArena {
+  position: absolute;
+  inset: 0;
+  z-index: 7;
+  padding: 22px;
+  background:
+    radial-gradient(circle at top left, rgba(37,99,235,0.08), transparent 32%),
+    radial-gradient(circle at top right, rgba(239,68,68,0.08), transparent 28%),
+    linear-gradient(180deg, rgba(4,8,15,0.18), rgba(4,8,15,0.3));
+  overflow: hidden;
+}
+
+#duelWorld {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+}
+
+#duelWorld canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+#duelReticle {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 18px;
+  height: 18px;
+  margin-left: -9px;
+  margin-top: -9px;
+  border: 1px solid rgba(255,255,255,0.9);
+  border-radius: 999px;
+  z-index: 1;
+  pointer-events: none;
+  box-shadow: 0 0 14px rgba(255,255,255,0.25);
+}
+
+#duelReticle::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 4px;
+  height: 4px;
+  margin-left: -2px;
+  margin-top: -2px;
+  border-radius: 999px;
+  background: rgba(255,255,255,0.95);
+}
+
+#duelInteractionPrompt,
+#duelStatusBar,
+#duelActionPanel {
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 18px;
+  background: rgba(8, 14, 24, 0.78);
+  backdrop-filter: blur(10px);
+  box-shadow: 0 24px 60px rgba(0,0,0,0.3);
+  position: relative;
+  z-index: 1;
+}
+
+#duelStatusBar {
+  position: absolute;
+  left: 22px;
+  right: 436px;
+  top: 22px;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+  padding: 14px 18px;
+  font-size: 13px;
+}
+
+#duelRoundLabel,
+#duelRoleLabel,
+#duelStatusText {
+  min-height: 20px;
+}
+
+#duelStatusText {
+  color: #bfdbfe;
+  text-align: right;
+}
+
+#officeSignal,
+#hackerSignal {
+  font-size: 12px;
+  color: rgba(255,255,255,0.72);
+}
+
+#duelInteractionPrompt {
+  position: absolute;
+  left: 50%;
+  bottom: 34px;
+  transform: translateX(-50%);
+  padding: 12px 18px;
+  font-size: 13px;
+  color: #e2e8f0;
+  pointer-events: none;
+}
+
+.duel-prompt-title {
+  font-size: 18px;
+  font-weight: 600;
+}
+
+.duel-meter {
+  display: inline-flex;
+  padding: 6px 10px;
+  border-radius: 999px;
+  background: rgba(255,255,255,0.08);
+  border: 1px solid rgba(255,255,255,0.08);
+  color: rgba(255,255,255,0.86);
+  font-size: 12px;
+}
+
+.duel-prompt-body {
+  font-size: 15px;
+  line-height: 1.6;
+  white-space: pre-line;
+  color: rgba(255,255,255,0.9);
+}
+
+.duel-clue {
+  padding: 12px 14px;
+  border-radius: 14px;
+  background: rgba(255,255,255,0.06);
+  color: #dbeafe;
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+#duelActionPanel {
+  position: absolute;
+  left: 22px;
+  top: 112px;
+  bottom: 22px;
+  width: min(560px, calc(100vw - 44px));
+  padding: 18px;
+  display: none;
+  overflow-y: auto;
+}
+
+#duelArena.device-open #duelActionPanel {
+  display: block;
+}
+
+#mobileDuelControls {
+  position: absolute;
+  left: 16px;
+  right: 16px;
+  bottom: max(14px, env(safe-area-inset-bottom));
+  z-index: 3;
+  display: none;
+  justify-content: space-between;
+  align-items: flex-end;
+  gap: 18px;
+  pointer-events: none;
+}
+
+#mobileMovePad,
+#mobileActionPad {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  pointer-events: auto;
+}
+
+.mobile-move-row {
+  display: grid;
+  grid-template-columns: repeat(3, 56px);
+  gap: 10px;
+}
+
+.mobile-control {
+  border: 1px solid rgba(255,255,255,0.16);
+  border-radius: 18px;
+  background: rgba(8, 14, 24, 0.82);
+  color: #fff;
+  backdrop-filter: blur(10px);
+  box-shadow: 0 14px 30px rgba(0,0,0,0.28);
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: none;
+}
+
+.mobile-control.move {
+  width: 56px;
+  height: 56px;
+  font-size: 22px;
+}
+
+#mobileMovePad > .mobile-control.move {
+  align-self: center;
+}
+
+.mobile-control.action {
+  min-width: 88px;
+  min-height: 52px;
+  padding: 12px 16px;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.mobile-control:active,
+.mobile-control.active {
+  background: rgba(37,99,235,0.5);
+  transform: translateY(1px);
+}
+
+.duel-device-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+#duelDeviceName {
+  font-size: 12px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.68);
+}
+
+#duelClosePanelBtn {
+  border: 1px solid rgba(255,255,255,0.12);
+  border-radius: 999px;
+  background: rgba(255,255,255,0.06);
+  color: #fff;
+  padding: 8px 12px;
+  cursor: pointer;
+}
+
+#duelClosePanelBtn:hover {
+  background: rgba(255,255,255,0.12);
+}
+
+#duelActionTitle {
+  font-size: 18px;
+  font-weight: 600;
+}
+
+#duelActionSubtitle {
+  margin-top: 6px;
+  font-size: 13px;
+  color: rgba(255,255,255,0.7);
+}
+
+#duelDeviceMeta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 14px;
+}
+
+#duelDeviceScreen {
+  margin-top: 16px;
+  border-radius: 16px;
+  background: rgba(255,255,255,0.05);
+  border: 1px solid rgba(255,255,255,0.06);
+  overflow: hidden;
+}
+
+#duelDeviceViewport {
+  min-height: 318px;
+}
+
+.duel-window {
+  min-height: 318px;
+  background: linear-gradient(180deg, rgba(15,23,42,0.98), rgba(12,18,30,0.96));
+}
+
+.duel-window.idle {
+  display: flex;
+  flex-direction: column;
+}
+
+.duel-window-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 12px 14px;
+  border-bottom: 1px solid rgba(255,255,255,0.08);
+  background: rgba(255,255,255,0.04);
+  color: rgba(255,255,255,0.8);
+  font-size: 12px;
+}
+
+.duel-window-dots {
+  display: inline-flex;
+  gap: 6px;
+}
+
+.duel-window-dots i {
+  width: 9px;
+  height: 9px;
+  border-radius: 999px;
+  display: inline-block;
+  background: rgba(255,255,255,0.18);
+}
+
+.duel-window-dots i:nth-child(1) {
+  background: #fb7185;
+}
+
+.duel-window-dots i:nth-child(2) {
+  background: #fbbf24;
+}
+
+.duel-window-dots i:nth-child(3) {
+  background: #34d399;
+}
+
+.duel-window-label,
+.duel-window-mode {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.duel-window-body {
+  display: grid;
+  grid-template-columns: 148px minmax(0, 1fr);
+  min-height: 268px;
+}
+
+.duel-sidebar {
+  padding: 14px 10px;
+  border-right: 1px solid rgba(255,255,255,0.08);
+  background: rgba(255,255,255,0.03);
+}
+
+.duel-sidebar-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 12px;
+  border-radius: 12px;
+  color: rgba(255,255,255,0.68);
+  font-size: 13px;
+}
+
+.duel-sidebar-item.active {
+  background: rgba(59,130,246,0.16);
+  color: #e0f2fe;
+}
+
+.duel-app-chip {
+  width: 24px;
+  height: 24px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 8px;
+  background: rgba(255,255,255,0.08);
+  font-size: 11px;
+}
+
+.duel-screen-main {
+  padding: 16px;
+  display: grid;
+  gap: 14px;
+}
+
+.duel-screen-topline {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 14px;
+  color: rgba(255,255,255,0.72);
+  font-size: 12px;
+}
+
+.duel-screen-topline strong {
+  display: block;
+  color: #fff;
+  font-size: 15px;
+}
+
+.duel-screen-empty {
+  flex: 1;
+  display: grid;
+  place-items: center;
+  padding: 26px;
+  text-align: center;
+  color: rgba(255,255,255,0.82);
+}
+
+.duel-mail-layout,
+.duel-monitor-grid {
+  display: grid;
+  gap: 14px;
+}
+
+.duel-mail-layout {
+  grid-template-columns: minmax(0, 180px) minmax(0, 1fr);
+}
+
+.duel-mail-list {
+  display: grid;
+  gap: 10px;
+}
+
+.duel-mail-item,
+.duel-feed-card {
+  padding: 14px;
+  border-radius: 14px;
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.08);
+}
+
+.duel-mail-item.active {
+  background: rgba(37,99,235,0.18);
+  border-color: rgba(147,197,253,0.46);
+}
+
+.duel-mail-item strong,
+.duel-feed-heading {
+  display: block;
+  color: #fff;
+  font-size: 13px;
+  margin-bottom: 6px;
+}
+
+.duel-mail-item span,
+.duel-feed-card p,
+.duel-camera-caption,
+.duel-message p {
+  color: rgba(255,255,255,0.78);
+  line-height: 1.5;
+  font-size: 13px;
+}
+
+.duel-mail-preview {
+  display: grid;
+  gap: 12px;
+}
+
+.duel-clue-banner,
+.duel-badge-state {
+  padding: 11px 12px;
+  border-radius: 12px;
+  font-size: 13px;
+  line-height: 1.45;
+}
+
+.duel-clue-banner {
+  background: rgba(59,130,246,0.14);
+  border: 1px solid rgba(147,197,253,0.28);
+  color: #dbeafe;
+}
+
+.duel-badge-state {
+  background: rgba(248,113,113,0.14);
+  border: 1px solid rgba(252,165,165,0.28);
+  color: #fee2e2;
+}
+
+.duel-people-row {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.duel-persona-card {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px;
+  border-radius: 14px;
+  background: rgba(255,255,255,0.05);
+  border: 1px solid rgba(255,255,255,0.08);
+}
+
+.duel-persona-card strong {
+  display: block;
+  color: #fff;
+}
+
+.duel-persona-card span {
+  display: block;
+  margin-top: 3px;
+  color: rgba(255,255,255,0.65);
+  font-size: 12px;
+}
+
+.duel-avatar {
+  width: 38px;
+  height: 38px;
+  border-radius: 12px;
+  background: linear-gradient(135deg, #475569, #94a3b8);
+  box-shadow: inset 0 0 0 1px rgba(255,255,255,0.12);
+}
+
+.duel-avatar.office {
+  background: linear-gradient(135deg, #0f766e, #38bdf8);
+}
+
+.duel-avatar.hacker {
+  background: linear-gradient(135deg, #831843, #8b5cf6);
+}
+
+.duel-thread {
+  display: grid;
+  gap: 10px;
+}
+
+.duel-thread-header {
+  color: #fff;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.duel-message {
+  max-width: 88%;
+  padding: 12px 14px;
+  border-radius: 16px;
+  background: rgba(255,255,255,0.06);
+  border: 1px solid rgba(255,255,255,0.08);
+}
+
+.duel-message strong {
+  display: block;
+  margin-bottom: 5px;
+  color: #fff;
+  font-size: 12px;
+}
+
+.duel-message.outbound {
+  justify-self: end;
+  background: rgba(59,130,246,0.16);
+}
+
+.duel-message.inbound {
+  justify-self: start;
+}
+
+.duel-data-table {
+  display: grid;
+  grid-template-columns: 140px minmax(0, 1fr);
+  gap: 10px 12px;
+  margin-top: 12px;
+  font-size: 13px;
+}
+
+.duel-data-table span {
+  color: rgba(255,255,255,0.58);
+}
+
+.duel-data-table strong {
+  color: #fff;
+}
+
+.duel-camera-stage {
+  min-height: 164px;
+  border-radius: 14px;
+  background:
+    radial-gradient(circle at 50% 28%, rgba(255,255,255,0.18), transparent 22%),
+    linear-gradient(180deg, rgba(51,65,85,0.62), rgba(15,23,42,0.92));
+  display: grid;
+  place-items: center;
+  padding: 18px;
+}
+
+.duel-silhouette {
+  width: 76px;
+  height: 112px;
+  border-radius: 40px 40px 24px 24px;
+  background:
+    radial-gradient(circle at 50% 22%, rgba(255,255,255,0.15), transparent 14%),
+    linear-gradient(180deg, rgba(241,245,249,0.2), rgba(148,163,184,0.3));
+  position: relative;
+}
+
+.duel-silhouette::before {
+  content: "";
+  position: absolute;
+  left: 19px;
+  top: -34px;
+  width: 38px;
+  height: 38px;
+  border-radius: 999px;
+  background: linear-gradient(180deg, rgba(248,250,252,0.2), rgba(148,163,184,0.32));
+}
+
+#duelChoices {
+  display: grid;
+  gap: 10px;
+  margin-top: 16px;
+}
+
+.duel-choice {
+  padding: 14px 16px;
+  border-radius: 14px;
+  border: 1px solid rgba(255,255,255,0.1);
+  background: rgba(255,255,255,0.06);
+  color: #fff;
+  text-align: left;
+  cursor: pointer;
+  transition: transform 0.15s ease, background 0.18s ease, border-color 0.18s ease;
+}
+
+.duel-choice:hover {
+  transform: translateY(-2px) translateZ(6px);
+  background: rgba(255,255,255,0.11);
+  border-color: rgba(191,219,254,0.4);
+}
+
+.duel-choice.locked {
+  background: rgba(59,130,246,0.28);
+  border-color: rgba(147,197,253,0.68);
+}
+
+.duel-choice.disabled {
+  opacity: 0.52;
+  pointer-events: none;
+}
+
+.duel-choice small {
+  display: block;
+  margin-top: 6px;
+  color: rgba(255,255,255,0.7);
+  font-size: 12px;
+}
+
+@media (max-width: 900px) {
+  #duelArena {
+    padding: 14px;
+  }
+
+  #duelStatusBar {
+    left: 14px;
+    right: 14px;
+    top: 14px;
+  }
+
+  #duelStatusBar {
+    grid-template-columns: 1fr;
+  }
+
+  #duelStatusText {
+    text-align: left;
+  }
+
+  #duelActionPanel {
+    left: 14px;
+    right: 14px;
+    top: auto;
+    bottom: 14px;
+    width: auto;
+    max-height: 58vh;
+  }
+
+  #duelInteractionPrompt {
+    left: 14px;
+    right: 14px;
+    bottom: 18px;
+    transform: none;
+  }
+
+  .duel-window-body,
+  .duel-mail-layout,
+  .duel-people-row {
+    grid-template-columns: 1fr;
+  }
+}
+
+body.is-mobile-device {
+  overflow: auto;
+}
+
+body.is-mobile-device #game {
+  min-height: 100dvh;
+  height: 100dvh;
+}
+
+body.is-mobile-device #scoreBar {
+  top: 8px;
+  left: 8px;
+  z-index: 8;
+}
+
+body.is-mobile-device #scoreFill {
+  width: min(42vw, 160px);
+}
+
+body.is-mobile-device #multiplayerHud {
+  top: auto;
+  right: 10px;
+  left: 10px;
+  bottom: calc(max(18px, env(safe-area-inset-bottom)) + 210px);
+  min-width: 0;
+  z-index: 9;
+}
+
+body.is-mobile-device #dialogueBox {
+  padding: 14px 14px calc(18px + env(safe-area-inset-bottom));
+  min-height: 34vh;
+  max-height: 42vh;
+}
+
+body.is-mobile-device #text {
+  font-size: 15px;
+  min-height: 48px;
+}
+
+body.is-mobile-device .choice {
+  padding: 11px 12px;
+  font-size: 14px;
+}
+
+body.is-mobile-device #modeBox {
+  width: min(92vw, 420px);
+  padding: 22px 18px;
+}
+
+body.is-mobile-device #summaryBox,
+body.is-mobile-device #resultBox {
+  width: min(92vw, 600px);
+}
+
+body.is-mobile-device #duelArena {
+  padding: 10px;
+}
+
+body.is-mobile-device #duelStatusBar {
+  left: 10px;
+  right: 10px;
+  top: 10px;
+  grid-template-columns: 1fr;
+  gap: 6px;
+  padding: 12px 14px;
+  font-size: 12px;
+}
+
+body.is-mobile-device #duelStatusText {
+  text-align: left;
+}
+
+body.is-mobile-device #duelInteractionPrompt {
+  left: 10px;
+  right: 10px;
+  bottom: calc(max(18px, env(safe-area-inset-bottom)) + 122px);
+  transform: none;
+  font-size: 12px;
+  padding: 10px 12px;
+  text-align: center;
+}
+
+body.is-mobile-device #duelActionPanel {
+  left: 10px;
+  right: 10px;
+  top: 118px;
+  bottom: calc(max(18px, env(safe-area-inset-bottom)) + 132px);
+  width: auto;
+  max-height: none;
+  padding: 14px;
+}
+
+body.is-mobile-device #duelDeviceViewport,
+body.is-mobile-device .duel-window {
+  min-height: 250px;
+}
+
+body.is-mobile-device #mobileDuelControls {
+  display: flex;
+}
+
+body.is-mobile-device #duelReticle {
+  display: none;
+}
